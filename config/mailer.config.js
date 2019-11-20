@@ -11,5 +11,5 @@ const transporter = nodemailer.createTransport({
 });
 
 module.exports.sendValidateEmail = (targetUser) => {
-  console.log('TODO!')
+  console.log('TODO!') // enviar el correo
 }

@@ -40,11 +40,13 @@ module.exports.validate = (req, res, next) => {
 }
 
 module.exports.login = (_, res) => {
-  res.send('TODO!')
+  res.render('users/login')
 }
 
 module.exports.doLogin = (req, res, next) => {
-  res.send('TODO!')
+  const user = {
+    
+  }
 }
 
 module.exports.logout = (req, res) => {
