@@ -44,9 +44,17 @@ module.exports.login = (_, res) => {
 }
 
 module.exports.doLogin = (req, res, next) => {
-  const user = {
-    
+  const {email, password} = req.body
+
+  // Se verifica que ha introducido un usuario y una contraseña
+  if(!email || !password) {
+    console.log('gggemi')
+    return res.render('users/login', {user: req.body})
   }
+
+  
+
+
 }
 
 module.exports.logout = (req, res) => {
