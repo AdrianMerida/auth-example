@@ -7,19 +7,17 @@ module.exports.index = (_, res, next) => {
     .then(users => {
       res.render('users/index', { users })
     })
-    .catch(next)
+    .catch(error => console.log("Error: " + error))
 }
 
 module.exports.new = (_, res) => {
   res.render('users/new', { user: new User() })
 }
 
-module.exports.create = (req, res, next) => {
-  const user = new User({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password
-  })
+module.exports.create = async (req, res, next) => {
+  //const { body: { email = [] } = {} } = req
+  const { name, email, password } = req.body
+  const user = new User({ name, email, password })
 
   user.save()
     .then((user) => {
@@ -36,7 +34,15 @@ module.exports.create = (req, res, next) => {
 }
 
 module.exports.validate = (req, res, next) => {
-  res.send('TODO!')
+  const token = req.params.token
+  User.findOneAndUpdate({ validateToken: token }, { $set: { validated: true } }, { new: true })
+    .then(user => {
+      res.redirect("/login")
+    })
+    .catch(error => {
+      console.log("error en validación => ", error)
+      res.redirect("/login")
+    })
 }
 
 module.exports.login = (_, res) => {
@@ -44,19 +50,28 @@ module.exports.login = (_, res) => {
 }
 
 module.exports.doLogin = (req, res, next) => {
-  const {email, password} = req.body
+  const { email, password } = req.body
 
   // Se verifica que ha introducido un usuario y una contraseña
-  if(!email || !password) {
-    console.log('gggemi')
-    return res.render('users/login', {user: req.body})
+  if (!email || !password) {
+    res.redirect("/login")
   }
 
-  
-
-
+  User.findOne({ email: email, validated: true })
+    .then(user => {
+      if (user) {
+        user.checkPassword(password)
+          .then(() => {
+            req.session.user = user // esto es la clave
+            res.redirect('/users')
+          })
+          .catch(error => console.log('Error al hacer login => ', error))
+      }
+    })
+    .catch()
 }
 
 module.exports.logout = (req, res) => {
-  res.send('TODO!')
+  req.session.destroy()
+  res.redirect('/')
 }

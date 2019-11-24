@@ -26,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session);
 
+// middleware que guarde todas las variables visibles a todas las vistas en res.locals
 app.use((req, res, next) => {
   res.locals.currentUser = 'TODO'
   next()

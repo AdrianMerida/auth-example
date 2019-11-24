@@ -10,6 +10,14 @@ const transporter = nodemailer.createTransport({
   auth: { user, pass }
 });
 
+const configuration = (targetUser) =>  ({
+  from: `"My Awesome Project 👻" <${user}>`,
+  to: targetUser.email,
+  subject: 'Verificación primera app IH!',
+  text: 'Si hay algún problema, devuelve esto, cuando no soporta html',
+  html: `<a href="${APP_HOST}/users/${targetUser.validateToken}/validate">Validate account</a>`
+})
+
 module.exports.sendValidateEmail = (targetUser) => {
-  console.log('TODO!') // enviar el correo
+  transporter.sendMail(configuration(targetUser))
 }
