@@ -28,7 +28,7 @@ module.exports.create = async (req, res, next) => {
       if (error instanceof mongoose.Error.ValidationError) {
         res.render('users/new', { user, error: error.errors })
       } else {
-        next(error);
+        console.log('Error en create => ' + error)
       }
     })
 }
@@ -63,7 +63,7 @@ module.exports.doLogin = (req, res, next) => {
         user.checkPassword(password)
           .then(() => {
             req.session.user = user // esto es la clave
-            res.redirect('/users')
+            res.redirect('/')
           })
           .catch(error => console.log('Error al hacer login => ', error))
       }
