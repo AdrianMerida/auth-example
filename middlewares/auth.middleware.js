@@ -4,7 +4,6 @@ module.exports.isAuthenticated = (req, res, next) => {
   } else {
     res.redirect('/login')
   }
-  next()
 }
 
 module.exports.isNotAuthenticated = (req, res, next) => {
